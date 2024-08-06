@@ -60,9 +60,11 @@ class ContactsServicesImplTest {
         request.setLastName("Mfon");
         request.setEmail("mfon@gmail.com");
         request.setPhoneNumber("08123115688");
-        String id = contactsService.deleteByPhoneNumber();
-        AddContactResponse response = new AddContactResponse();
+        String id = contactsService.createContact(request).getContactId();
+        contactRepository.deleteById(id);
         DeleteContactResponse response1 = new DeleteContactResponse();
-        assertThat(response.getMessage()).contains("Deleted Successfully");
+        assertThat(response1.getMessage()).contains("Deleted Successfully");
     }
+
+
 }
