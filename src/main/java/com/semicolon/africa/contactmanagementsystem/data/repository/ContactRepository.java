@@ -6,8 +6,10 @@ import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Repository
 public interface ContactRepository extends MongoRepository<Contact, String>{
-    Contact findByPhoneNumber(String phoneNumber);
+    Optional<Contact> findByPhoneNumber(String phoneNumber);
     boolean existsByPhoneNumber(String phoneNumber);
 }

@@ -2,17 +2,18 @@ package com.semicolon.africa.contactmanagementsystem.services;
 
 import com.semicolon.africa.contactmanagementsystem.data.model.Contact;
 import com.semicolon.africa.contactmanagementsystem.data.repository.ContactRepository;
-import com.semicolon.africa.contactmanagementsystem.dto.DeleteContactResponse;
-import com.semicolon.africa.contactmanagementsystem.dto.UpdateContactResponse;
+import com.semicolon.africa.contactmanagementsystem.dto.response.DeleteContactResponse;
+import com.semicolon.africa.contactmanagementsystem.dto.response.UpdateContactResponse;
 import com.semicolon.africa.contactmanagementsystem.dto.request.AddContactsRequest;
 import com.semicolon.africa.contactmanagementsystem.dto.request.UpdateContactRequest;
 import com.semicolon.africa.contactmanagementsystem.dto.response.AddContactResponse;
 import com.semicolon.africa.contactmanagementsystem.exception.PhoneNumberException;
+import com.semicolon.africa.contactmanagementsystem.exception.PhoneNumberExistException;
+import com.semicolon.africa.contactmanagementsystem.exception.findingContactByIdException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ContactsServicesImpl implements ContactsService{
@@ -40,7 +41,7 @@ public class ContactsServicesImpl implements ContactsService{
     }
     private void validatePhoneNumber(String phoneNumber){
         boolean isPhoneNumberExist = contactRepository.existsByPhoneNumber(phoneNumber);
-        if (isPhoneNumberExist)throw new PhoneNumberException("Phone number already exists");
+        if (isPhoneNumberExist)throw new PhoneNumberExistException("Phone number already exists");
     }
     @Override
     public UpdateContactResponse updateContact(UpdateContactRequest request) {
@@ -50,6 +51,9 @@ public class ContactsServicesImpl implements ContactsService{
         contact.setEmail(request.getEmail());
         contact.setPhoneNumber(request.getPhoneNumber());
         UpdateContactResponse response = new UpdateContactResponse();
+        response.setFirstName(contact.getFirstName());
+        response.setLastName(contact.getLastName());
+        response.setPhoneNumber(contact.getPhoneNumber());
         response.setMessage("Contact updated");
         return response;
     }
@@ -61,14 +65,16 @@ public class ContactsServicesImpl implements ContactsService{
         response.setMessage("Contact deleted");
         return response;
     }
-
-    private Contact findContactByPhoneNumber(String phoneNumber) {
-        Optional<String> checkForP
-        Contact contact = contactRepository.findByPhoneNumber(phoneNumber).orElseThrow()
+    @Override
+    public List<Contact> getAllContacts() {
+        return contactRepository.findAll();
     }
-
+    private Contact findContactByPhoneNumber(String phoneNumber) {
+        return contactRepository.findByPhoneNumber(phoneNumber)
+                .orElseThrow(()->new PhoneNumberException("PhoneNumber Not Found"));
+    }
     private Contact findById(String id) {
         return contactRepository.findById(id).
-                orElseThrow(()->new PhoneNumberException("Contact Not Found"));
+                orElseThrow(()->new findingContactByIdException("ID Not Found"));
     }
 }

@@ -1,9 +1,8 @@
 package com.semicolon.africa.contactmanagementsystem.services;
 
-import com.semicolon.africa.contactmanagementsystem.data.model.Contact;
 import com.semicolon.africa.contactmanagementsystem.data.repository.ContactRepository;
-import com.semicolon.africa.contactmanagementsystem.dto.DeleteContactResponse;
-import com.semicolon.africa.contactmanagementsystem.dto.UpdateContactResponse;
+import com.semicolon.africa.contactmanagementsystem.dto.response.DeleteContactResponse;
+import com.semicolon.africa.contactmanagementsystem.dto.response.UpdateContactResponse;
 import com.semicolon.africa.contactmanagementsystem.dto.request.AddContactsRequest;
 import com.semicolon.africa.contactmanagementsystem.dto.request.UpdateContactRequest;
 import com.semicolon.africa.contactmanagementsystem.dto.response.AddContactResponse;
@@ -13,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class ContactsServicesImplTest {
@@ -44,11 +42,14 @@ class ContactsServicesImplTest {
     @Test
     public void testThatContactCanBeUpdated(){
         UpdateContactRequest request = new UpdateContactRequest();
-        request.setFirstName("New Mfon");
-        request.setLastName("New Mfon");
+        request.setFirstName("Mfon");
+        request.setLastName("Mfon");
         request.setEmail("mfonm579@gmail.com");
         request.setPhoneNumber("08123115688");
         UpdateContactResponse response = contactsService.updateContact(request);
+        response.setFirstName("Paul");
+        response.setLastName("Mfon");
+        response.setPhoneNumber("08147995494");
         assertThat(response).isNotNull();
         assertThat(response.getMessage()).contains("Contact updated");
     }
@@ -60,9 +61,11 @@ class ContactsServicesImplTest {
         request.setLastName("Mfon");
         request.setEmail("mfon@gmail.com");
         request.setPhoneNumber("08123115688");
-        String id = contactsService.deleteByPhoneNumber();
-        AddContactResponse response = new AddContactResponse();
+        String id = contactsService.createContact(request).getContactId();
+        contactRepository.deleteById(id);
         DeleteContactResponse response1 = new DeleteContactResponse();
-        assertThat(response.getMessage()).contains("Deleted Successfully");
+        assertThat(response1.getMessage()).contains("Deleted Successfully");
     }
+
+
 }
