@@ -30,7 +30,7 @@ public class ContactController {
             return new ResponseEntity<>(new ContactApiResponse(false, exception), HttpStatus.BAD_REQUEST);
         }
     }
-    @PatchMapping("/edit-contact")
+    @PatchMapping("edit-contact")
     public ResponseEntity<?> updateContact(@RequestBody UpdateContactRequest request){
         try {
             UpdateContactResponse response = contactsService.updateContact(request);

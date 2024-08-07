@@ -17,6 +17,7 @@ import java.util.List;
 @Document
 public class User {
     private String id;
+    private boolean isLoggedIn;
     private String firstName;
     private String lastName;
     private String email;

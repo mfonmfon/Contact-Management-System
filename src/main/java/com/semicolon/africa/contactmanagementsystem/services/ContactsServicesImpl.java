@@ -10,16 +10,15 @@ import com.semicolon.africa.contactmanagementsystem.dto.response.AddContactRespo
 import com.semicolon.africa.contactmanagementsystem.exception.PhoneNumberException;
 import com.semicolon.africa.contactmanagementsystem.exception.PhoneNumberExistException;
 import com.semicolon.africa.contactmanagementsystem.exception.findingContactByIdException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class ContactsServicesImpl implements ContactsService{
-
-    @Autowired
-    private ContactRepository contactRepository;
+    private final ContactRepository contactRepository;
 
     @Override
     public AddContactResponse createContact(AddContactsRequest request) {
@@ -31,7 +30,6 @@ public class ContactsServicesImpl implements ContactsService{
         contact.setPhoneNumber(request.getPhoneNumber());
         contactRepository.save(contact);
         AddContactResponse response = new AddContactResponse();
-        response.setContactId(contact.getId());
         response.setFirstName(contact.getFirstName());
         response.setEmail(contact.getEmail());
         response.setLastName(contact.getLastName());
@@ -45,15 +43,16 @@ public class ContactsServicesImpl implements ContactsService{
     }
     @Override
     public UpdateContactResponse updateContact(UpdateContactRequest request) {
-        Contact contact = new Contact();
+        Contact contact = findContactByPhoneNumber(request.getPhoneNumber());
         contact.setFirstName(request.getFirstName());
         contact.setLastName(request.getLastName());
         contact.setEmail(request.getEmail());
-        contact.setPhoneNumber(request.getPhoneNumber());
+        contactRepository.save(contact);
         UpdateContactResponse response = new UpdateContactResponse();
+        response.setPhoneNumber(contact.getPhoneNumber());
         response.setFirstName(contact.getFirstName());
         response.setLastName(contact.getLastName());
-        response.setPhoneNumber(contact.getPhoneNumber());
+        response.setEmail(contact.getEmail());
         response.setMessage("Contact updated");
         return response;
     }
