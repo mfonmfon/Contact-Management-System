@@ -56,5 +56,4 @@ public class UserServiceImpl implements UserService{
         logout.setMessage("Successfully Logout");
         return logout;
     }
-
 }
