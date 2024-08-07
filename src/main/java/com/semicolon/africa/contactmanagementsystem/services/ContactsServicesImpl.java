@@ -72,7 +72,7 @@ public class ContactsServicesImpl implements ContactsService{
         return contactRepository.findByPhoneNumber(phoneNumber)
                 .orElseThrow(()->new PhoneNumberException("PhoneNumber Not Found"));
     }
-    private Contact findById(String id) {
+    public Contact findById(String id) {
         return contactRepository.findById(id).
                 orElseThrow(()->new findingContactByIdException("ID Not Found"));
     }

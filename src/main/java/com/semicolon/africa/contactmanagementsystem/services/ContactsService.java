@@ -20,4 +20,6 @@ public interface ContactsService {
 
     List<Contact> getAllContacts();
 
+    Contact findById(String contactId);
+
 }

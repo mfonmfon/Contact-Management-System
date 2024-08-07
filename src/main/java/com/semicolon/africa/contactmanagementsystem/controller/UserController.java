@@ -1,8 +1,8 @@
 package com.semicolon.africa.contactmanagementsystem.controller;
 
-import com.semicolon.africa.contactmanagementsystem.dto.request.RegisterUserContactRequest;
+import com.semicolon.africa.contactmanagementsystem.dto.request.RegisterUserRequest;
 import com.semicolon.africa.contactmanagementsystem.dto.response.ContactApiResponse;
-import com.semicolon.africa.contactmanagementsystem.dto.response.RegisterUserContactResponse;
+import com.semicolon.africa.contactmanagementsystem.dto.response.RegisterUserResponse;
 import com.semicolon.africa.contactmanagementsystem.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,10 +20,10 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/sign-up")
-    public ResponseEntity<?> signUp(@RequestBody RegisterUserContactRequest request){
+    @PostMapping("/add-contact")
+    public ResponseEntity<?> addContact(@RequestBody RegisterUserRequest request){
         try {
-            RegisterUserContactResponse response = userService.signUp(request);
+            RegisterUserResponse response = userService.signUp(request);
             return new ResponseEntity<>(new ContactApiResponse(true, response), HttpStatus.CREATED);
         }
         catch (Exception exception) {

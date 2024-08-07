@@ -1,18 +1,20 @@
 package com.semicolon.africa.contactmanagementsystem.services;
 
-import com.semicolon.africa.contactmanagementsystem.dto.request.LoginUserRequest;
-import com.semicolon.africa.contactmanagementsystem.dto.request.LogoutRequest;
-import com.semicolon.africa.contactmanagementsystem.dto.request.RegisterUserContactRequest;
-import com.semicolon.africa.contactmanagementsystem.dto.response.LoginUserResponse;
-import com.semicolon.africa.contactmanagementsystem.dto.response.LogoutResponse;
-import com.semicolon.africa.contactmanagementsystem.dto.response.RegisterUserContactResponse;
+import com.semicolon.africa.contactmanagementsystem.dto.request.*;
+import com.semicolon.africa.contactmanagementsystem.dto.response.*;
 import org.springframework.stereotype.Service;
 
 @Service
 public interface UserService {
 
-    RegisterUserContactResponse signUp(RegisterUserContactRequest register);
+    RegisterUserResponse signUp(RegisterUserRequest register);
+
     LoginUserResponse login(LoginUserRequest request);
+
     LogoutResponse logout(LogoutRequest logoutRequest);
+
+    AddContactResponse addContact(AddContactsRequest request);
+
+    ShareContactResponse shareContact(ShareContactRequest request);
 
 }
