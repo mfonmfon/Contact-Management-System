@@ -43,7 +43,7 @@ public class ContactController {
     @DeleteMapping("/{phoneNumber}")
     public ResponseEntity<?> deleteContact(@PathVariable String phoneNumber){
         try {
-            DeleteContactResponse response = contactsService.deleteByPhoneNumber(phoneNumber);
+            DeleteContactResponse response = contactsService.deleteContactWith(phoneNumber);
             return new ResponseEntity<>(new ContactApiResponse(true,response), HttpStatus.OK);
         }
         catch (Exception exception){

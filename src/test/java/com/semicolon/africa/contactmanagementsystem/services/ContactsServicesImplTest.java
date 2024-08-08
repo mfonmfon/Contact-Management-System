@@ -29,23 +29,25 @@ class ContactsServicesImplTest {
 
     @Test
     public void testThatCanCreateContact(){
-        AddContactsRequest request  = new AddContactsRequest();
-        request.setFirstName("Mfon");
-        request.setLastName("Mfon");
-        request.setPhoneNumber("08147995494");
-        request.setEmail("mfonm579@gmail.com");
+        AddContactsRequest request  = creationDetails();
+
         AddContactResponse response = contactsService.createContact(request);
         assertThat(response).isNotNull();
         assertThat(response.getMessage()).contains("Contact created successful");
     }
 
-    @Test
-    public void testThatContactCanBeUpdated(){
-        UpdateContactRequest request = new UpdateContactRequest();
+    private AddContactsRequest creationDetails() {
+        AddContactsRequest request = new AddContactsRequest();
         request.setFirstName("Mfon");
         request.setLastName("Mfon");
+        request.setPhoneNumber("08147995494");
         request.setEmail("mfonm579@gmail.com");
-        request.setPhoneNumber("08123115688");
+        return request;
+    }
+
+    @Test
+    public void testThatContactCanBeUpdated(){
+        UpdateContactRequest request = updateDetails();
         UpdateContactResponse response = contactsService.updateContact(request);
         response.setFirstName("Paul");
         response.setLastName("Mfon");
@@ -54,18 +56,20 @@ class ContactsServicesImplTest {
         assertThat(response.getMessage()).contains("Contact updated");
     }
 
-    @Test
-    public void testThatContactCanBeDeletedById(){
-        AddContactsRequest request = new AddContactsRequest();
+    private UpdateContactRequest updateDetails() {
+        UpdateContactRequest request = new UpdateContactRequest();
         request.setFirstName("Mfon");
         request.setLastName("Mfon");
-        request.setEmail("mfon@gmail.com");
+        request.setEmail("mfonm579@gmail.com");
         request.setPhoneNumber("08123115688");
+        return request;
+    }
+    @Test
+    public void testThatContactCanBeDeletedById(){
+        AddContactsRequest request = creationDetails();
         String id = contactsService.createContact(request).getContactId();
         contactRepository.deleteById(id);
         DeleteContactResponse response1 = new DeleteContactResponse();
         assertThat(response1.getMessage()).contains("Deleted Successfully");
     }
-
-
 }

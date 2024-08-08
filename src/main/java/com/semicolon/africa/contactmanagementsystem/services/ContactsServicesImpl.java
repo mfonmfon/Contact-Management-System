@@ -3,6 +3,7 @@ package com.semicolon.africa.contactmanagementsystem.services;
 import com.semicolon.africa.contactmanagementsystem.data.model.Contact;
 import com.semicolon.africa.contactmanagementsystem.data.repository.ContactRepository;
 import com.semicolon.africa.contactmanagementsystem.dto.response.DeleteContactResponse;
+import com.semicolon.africa.contactmanagementsystem.dto.response.ShareContactResponse;
 import com.semicolon.africa.contactmanagementsystem.dto.response.UpdateContactResponse;
 import com.semicolon.africa.contactmanagementsystem.dto.request.AddContactsRequest;
 import com.semicolon.africa.contactmanagementsystem.dto.request.UpdateContactRequest;
@@ -57,7 +58,7 @@ public class ContactsServicesImpl implements ContactsService{
         return response;
     }
     @Override
-    public DeleteContactResponse deleteByPhoneNumber(String phoneNumber) {
+    public DeleteContactResponse deleteContactWith(String phoneNumber) {
         Contact contact = findContactByPhoneNumber(phoneNumber);
         contactRepository.delete(contact);
         DeleteContactResponse response = new DeleteContactResponse();
@@ -75,5 +76,15 @@ public class ContactsServicesImpl implements ContactsService{
     public Contact findById(String id) {
         return contactRepository.findById(id).
                 orElseThrow(()->new findingContactByIdException("ID Not Found"));
+    }
+
+    @Override
+    public ShareContactResponse searchContactByUserPhoneNumber(String phoneNumber) {
+        return null;
+    }
+
+    @Override
+    public DeleteContactResponse deleteByUserByPhoneNumber(String userId) {
+        return null;
     }
 }

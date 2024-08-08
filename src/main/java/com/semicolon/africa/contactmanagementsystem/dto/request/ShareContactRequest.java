@@ -8,5 +8,5 @@ import lombok.Setter;
 public class ShareContactRequest {
     private String contactId;
     private String userId;
-    private String receiverId;
+
 }

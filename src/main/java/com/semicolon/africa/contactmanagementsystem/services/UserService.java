@@ -17,4 +17,8 @@ public interface UserService {
 
     ShareContactResponse shareContact(ShareContactRequest request);
 
+    DeleteContactResponse deleteContact(AddContactsRequest request);
+
+    UpdateContactResponse editContact(UpdateContactRequest request);
+
 }

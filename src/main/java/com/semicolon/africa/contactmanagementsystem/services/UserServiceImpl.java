@@ -1,11 +1,14 @@
 package com.semicolon.africa.contactmanagementsystem.services;
 
+import com.semicolon.africa.contactmanagementsystem.controller.ContactController;
 import com.semicolon.africa.contactmanagementsystem.data.model.Contact;
 import com.semicolon.africa.contactmanagementsystem.data.model.User;
 import com.semicolon.africa.contactmanagementsystem.data.repository.UserRepository;
 import com.semicolon.africa.contactmanagementsystem.dto.request.*;
 import com.semicolon.africa.contactmanagementsystem.dto.response.*;
+import com.semicolon.africa.contactmanagementsystem.exception.PhoneNumberException;
 import com.semicolon.africa.contactmanagementsystem.exception.UserEmailException;
+import com.semicolon.africa.contactmanagementsystem.exception.findingContactByIdException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -45,7 +48,7 @@ public class UserServiceImpl implements UserService{
     }
     private User findUserByEmail(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(()-> new UserEmailException("Email Not Found"));
+                .orElseThrow(()-> new UserEmailException("Invalid Details"));
     }
     @Override
     public LogoutResponse logout(LogoutRequest request) {
@@ -66,6 +69,41 @@ public class UserServiceImpl implements UserService{
         user.getContactList().add(contact);
         userRepository.save(user);
         return response;
+    }
+    @Override
+    public ShareContactResponse shareContact(ShareContactRequest request) {
+        Contact contact = new Contact();
+        contact.setPhoneNumber(request.getContactId());
+        User receiver = findById(request.getUserId());
+        receiver.getContactList().add(contact);
+        userRepository.save(receiver);
+        ShareContactResponse response = new ShareContactResponse();
+        response.setMessage("Contact Shared...");
+        return response;
+    }
+    private User findById(String userId) {
+        return userRepository.findById(userId).
+                orElseThrow(()->new findingContactByIdException("ID NOT FOUND"));
+    }
+    @Override
+    public DeleteContactResponse deleteContact(AddContactsRequest request) {
+        DeleteContactResponse response = contactsService.deleteContactWith(request.getContactId());
+//        Contact contact = contactsService.searchContactByUserPhoneNumber(response);
+        return null;
+    }
+    private User findUserByPhoneNumber(String phoneNumber) {
+        return userRepository.findByPhoneNumber(phoneNumber).
+                orElseThrow(()-> new PhoneNumberException("Phone number not found"));
+    }
+
+    @Override
+    public UpdateContactResponse editContact(UpdateContactRequest request) {
+        AddContactsRequest contactsRequest = new AddContactsRequest();
+        AddContactsRequest contactsResponse = contactsService.createContact(contactsRequest)
+        UpdateContactResponse response = contactsService.updateContact(request);
+
+
+        return null;
     }
 
 }
