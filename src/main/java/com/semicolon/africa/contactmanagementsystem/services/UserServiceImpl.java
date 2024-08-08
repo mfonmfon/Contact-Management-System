@@ -1,6 +1,5 @@
 package com.semicolon.africa.contactmanagementsystem.services;
 
-import com.semicolon.africa.contactmanagementsystem.controller.ContactController;
 import com.semicolon.africa.contactmanagementsystem.data.model.Contact;
 import com.semicolon.africa.contactmanagementsystem.data.model.User;
 import com.semicolon.africa.contactmanagementsystem.data.repository.UserRepository;
@@ -10,7 +9,6 @@ import com.semicolon.africa.contactmanagementsystem.exception.PhoneNumberExcepti
 import com.semicolon.africa.contactmanagementsystem.exception.UserEmailException;
 import com.semicolon.africa.contactmanagementsystem.exception.findingContactByIdException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -88,7 +86,6 @@ public class UserServiceImpl implements UserService{
     @Override
     public DeleteContactResponse deleteContact(AddContactsRequest request) {
         DeleteContactResponse response = contactsService.deleteContactWith(request.getContactId());
-//        Contact contact = contactsService.searchContactByUserPhoneNumber(response);
         return null;
     }
     private User findUserByPhoneNumber(String phoneNumber) {
@@ -97,12 +94,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UpdateContactResponse editContact(UpdateContactRequest request) {
-        AddContactsRequest contactsRequest = new AddContactsRequest();
-        AddContactsRequest contactsResponse = contactsService.createContact(contactsRequest)
-        UpdateContactResponse response = contactsService.updateContact(request);
-
-
+    public UpdateContactResponse editContact(AddContactsRequest request) {
         return null;
     }
 

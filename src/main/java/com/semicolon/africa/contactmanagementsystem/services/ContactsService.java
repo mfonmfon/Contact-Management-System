@@ -1,5 +1,4 @@
 package com.semicolon.africa.contactmanagementsystem.services;
-
 import com.semicolon.africa.contactmanagementsystem.data.model.Contact;
 import com.semicolon.africa.contactmanagementsystem.dto.response.DeleteContactResponse;
 import com.semicolon.africa.contactmanagementsystem.dto.request.UpdateContactRequest;

@@ -19,6 +19,6 @@ public interface UserService {
 
     DeleteContactResponse deleteContact(AddContactsRequest request);
 
-    UpdateContactResponse editContact(UpdateContactRequest request);
+    UpdateContactResponse editContact(AddContactsRequest request);
 
 }
