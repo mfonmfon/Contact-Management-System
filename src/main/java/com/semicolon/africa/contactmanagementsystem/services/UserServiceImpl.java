@@ -114,7 +114,7 @@ public class UserServiceImpl implements UserService{
                 orElseThrow(()-> new PhoneNumberException("Phone number not found..."));
     }
     @Override
-    public UpdateContactResponse editContact(AddContactsRequest request) {
+    public UpdateContactResponse editContact(UpdateContactRequest request) {
         User user = new User();
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());

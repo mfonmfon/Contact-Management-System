@@ -1,18 +1,12 @@
 package com.semicolon.africa.contactmanagementsystem.controller;
 
-import com.semicolon.africa.contactmanagementsystem.dto.request.AddContactsRequest;
-import com.semicolon.africa.contactmanagementsystem.dto.request.LoginUserRequest;
-import com.semicolon.africa.contactmanagementsystem.dto.request.LogoutRequest;
-import com.semicolon.africa.contactmanagementsystem.dto.request.RegisterUserRequest;
+import com.semicolon.africa.contactmanagementsystem.dto.request.*;
 import com.semicolon.africa.contactmanagementsystem.dto.response.*;
 import com.semicolon.africa.contactmanagementsystem.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -43,11 +37,22 @@ public class UserController {
         }
     }
 
-
-    @PostMapping
-    public ResponseEntity<?> logout(LogoutRequest request){
+    @PostMapping("/add-contact")
+    public ResponseEntity<?> addContact(@RequestBody AddContactsRequest request){
         try {
-            LogoutResponse response = userService.logout(request);
+            AddContactResponse response = userService.addContact(request);
+            return new ResponseEntity<>(new ContactApiResponse(true, response),
+                    HttpStatus.CREATED);
+        }
+        catch (Exception exception){
+            return new ResponseEntity<>(new ContactApiResponse(false, exception),
+                    HttpStatus.BAD_REQUEST);
+        }
+    }
+    @PatchMapping
+    public ResponseEntity<?> editContact(@RequestBody UpdateContactRequest request){
+        try {
+            UpdateContactResponse response = userService.editContact(request);
             return new ResponseEntity<>(new ContactApiResponse(true, response),
                     HttpStatus.OK);
         }
@@ -56,12 +61,25 @@ public class UserController {
                     HttpStatus.BAD_REQUEST);
         }
     }
-    @PostMapping("/add-contact")
-    public ResponseEntity<?> addContact(@RequestBody AddContactsRequest request){
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteContact( @RequestBody DeleteContactRequest request){
         try {
-            AddContactResponse response = userService.addContact(request);
+           DeleteContactResponse response = userService.deleteContact(request);
+           return new ResponseEntity<>(new ContactApiResponse(true, response),
+                   HttpStatus.OK);
+        }
+        catch (Exception exception){
+            return new ResponseEntity<>(new ContactApiResponse(false, exception),
+                    HttpStatus.BAD_REQUEST);
+        }
+    }
+    @PostMapping
+    public ResponseEntity<?> logout(@RequestBody LogoutRequest request){
+        try {
+            LogoutResponse response = userService.logout(request);
             return new ResponseEntity<>(new ContactApiResponse(true, response),
-                    HttpStatus.CREATED);
+                    HttpStatus.OK);
         }
         catch (Exception exception){
             return new ResponseEntity<>(new ContactApiResponse(false, exception),
