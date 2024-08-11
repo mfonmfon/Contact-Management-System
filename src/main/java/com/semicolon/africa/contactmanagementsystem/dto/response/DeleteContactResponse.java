@@ -7,4 +7,5 @@ import lombok.Setter;
 @Setter
 public class DeleteContactResponse {
     private String message;
+    private boolean isDelete;
 }

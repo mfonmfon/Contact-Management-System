@@ -1,9 +1,11 @@
 package com.semicolon.africa.contactmanagementsystem.services;
 
 import com.semicolon.africa.contactmanagementsystem.data.repository.UserRepository;
+import com.semicolon.africa.contactmanagementsystem.dto.request.AddContactsRequest;
 import com.semicolon.africa.contactmanagementsystem.dto.request.LoginUserRequest;
 import com.semicolon.africa.contactmanagementsystem.dto.request.LogoutRequest;
 import com.semicolon.africa.contactmanagementsystem.dto.request.RegisterUserRequest;
+import com.semicolon.africa.contactmanagementsystem.dto.response.AddContactResponse;
 import com.semicolon.africa.contactmanagementsystem.dto.response.LoginUserResponse;
 import com.semicolon.africa.contactmanagementsystem.dto.response.LogoutResponse;
 import com.semicolon.africa.contactmanagementsystem.dto.response.RegisterUserResponse;
@@ -37,7 +39,6 @@ public class UserServiceImplTest {
         register.setEmail("paulokon@gmail.com");
         register.setPhoneNumber("08123115788");
         RegisterUserResponse response = userService.signUp(register);
-        response.setUserId(register.getId());
         assertThat(response.getMessage()).contains("Successfully SignUp");
     }
 
@@ -64,7 +65,6 @@ public class UserServiceImplTest {
         register.setPhoneNumber("08147995494");
         return register;
     }
-
     @Test
     public void testThatUserCanLogin(){
         RegisterUserRequest register = registerUser();
@@ -86,5 +86,66 @@ public class UserServiceImplTest {
         request.setEmail("mfon@gmail.com");
         request.setPhoneNumber("08135644321");
         return request;
+    }
+    @Test
+    public void testThatUserCanAddPost(){
+        AddContactsRequest request = new AddContactsRequest();
+        request.setFirstName("Paul");
+        request.setLastName("Uche");
+        request.setEmail("pauluche@gmail.com");
+        request.setPhoneNumber("09144477788");
+        AddContactResponse response = userService.addContact(request);
+        assertThat(response).isNotNull();
+        assertThat(response.getMessage()).contains("Contact Created Successfully");
+        assertThat(userRepository.count()).isEqualTo(1L);
+    }
+
+    @Test
+    public void testThatUserCanNotHaveTheSamePhoneNumber(){
+        AddContactsRequest request = new AddContactsRequest();
+        request.setFirstName("Mfon");
+        request.setLastName("LastName");
+        request.setEmail("mfon@gmail.com");
+        request.setPhoneNumber("08123115688");
+        AddContactResponse response = userService.addContact(request);
+        assertThat(response).isNotNull();
+        assertThat(response.getMessage()).contains("Contact created successful");
+        assertThat(userRepository.count()).isEqualTo(1);
+        AddContactsRequest request1 = new AddContactsRequest();
+        request1.setEmail("paul@gmail.com");
+        request1.setFirstName("Paul");
+        request1.setLastName("Blessing");
+        request1.setPhoneNumber("08123115688");
+        AddContactResponse response1 = userService.addContact(request1);
+        assertThat(response1).isNotNull();
+        assertThat(response1.getMessage()).contains("Contact created successful");
+
+
+    }
+
+    @Test
+    public void testThatUserCanNotHaveTheSameEmail(){
+
+
+    }
+
+    @Test
+    public void testThatUserCanAddAndEditPost(){
+
+
+    }
+
+    @Test
+    public void testThatUserCanShareContactToAnotherUser(){
+
+    }
+
+    @Test
+    public void testThatUserCanFindContactByPhoneNumber(){
+
+    }
+    @Test
+    public void testThatUserCanAddAndDeleteContactByPhoneNumber(){
+
     }
 }

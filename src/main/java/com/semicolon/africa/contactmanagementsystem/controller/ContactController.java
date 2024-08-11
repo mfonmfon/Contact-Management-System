@@ -1,5 +1,7 @@
 package com.semicolon.africa.contactmanagementsystem.controller;
 
+import com.semicolon.africa.contactmanagementsystem.data.model.Contact;
+import com.semicolon.africa.contactmanagementsystem.data.repository.ContactRepository;
 import com.semicolon.africa.contactmanagementsystem.dto.response.DeleteContactResponse;
 import com.semicolon.africa.contactmanagementsystem.dto.response.UpdateContactResponse;
 import com.semicolon.africa.contactmanagementsystem.dto.request.AddContactsRequest;
@@ -12,15 +14,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @RequestMapping
-@RestController("/api/vi/contact")
+@RestController("/contact")
 @RequiredArgsConstructor
 public class ContactController {
 
     private final ContactsService contactsService;
 
-    @PostMapping("/create-contact")
+    @PostMapping("/add-contact")
     public ResponseEntity<?> addContact(@RequestBody AddContactsRequest request){
         try {
             AddContactResponse response = contactsService.createContact(request);
@@ -43,11 +48,19 @@ public class ContactController {
     @DeleteMapping("/{phoneNumber}")
     public ResponseEntity<?> deleteContact(@PathVariable String phoneNumber){
         try {
-            DeleteContactResponse response = contactsService.deleteContactWith(phoneNumber);
+            DeleteContactResponse response = contactsService.deleteByPhoneNumber(phoneNumber);
             return new ResponseEntity<>(new ContactApiResponse(true,response), HttpStatus.OK);
         }
         catch (Exception exception){
             return new ResponseEntity<>(new ContactApiResponse(false, exception), HttpStatus.BAD_REQUEST);
         }
     }
+
+//    @GetMapping
+//    public List<Contact> getAllContact(){
+//        try {
+//            contactsService.getAllContacts();
+//            return new ArrayList<>(new ContactApiResponse(true, ))
+//        }
+//    }
 }

@@ -11,5 +11,5 @@ import java.util.Optional;
 @Repository
 public interface ContactRepository extends MongoRepository<Contact, String>{
     Optional<Contact> findByPhoneNumber(String phoneNumber);
-    boolean existsByPhoneNumber(String phoneNumber);
+//    Optional<Boolean>  existsByPhoneNumber(String phoneNumber);
 }

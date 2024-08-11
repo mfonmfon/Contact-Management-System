@@ -30,7 +30,6 @@ class ContactsServicesImplTest {
     @Test
     public void testThatCanCreateContact(){
         AddContactsRequest request  = creationDetails();
-
         AddContactResponse response = contactsService.createContact(request);
         assertThat(response).isNotNull();
         assertThat(response.getMessage()).contains("Contact created successful");
