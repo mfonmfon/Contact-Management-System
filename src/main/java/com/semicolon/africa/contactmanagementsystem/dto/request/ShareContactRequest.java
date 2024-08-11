@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ShareContactRequest {
-    private String contactId;
-    private String userId;
+    private String receiverId;
+    private String senderId;
 
 }

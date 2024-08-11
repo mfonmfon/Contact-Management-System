@@ -6,7 +6,9 @@ import lombok.Setter;
 @Setter
 @Getter
 public class LoginUserResponse {
-    private boolean isLoggedIn = false;
+    private boolean isLoggedIn;
     private String message;
+    private String email;
+    private String phoneNumber;
 
 }

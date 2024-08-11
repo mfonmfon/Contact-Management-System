@@ -10,5 +10,4 @@ public class AddContactsRequest {
     private String lastName;
     private String phoneNumber;
     private String email;
-    private String contactId;
 }

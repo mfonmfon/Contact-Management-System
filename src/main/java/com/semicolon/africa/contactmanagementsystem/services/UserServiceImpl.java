@@ -9,7 +9,10 @@ import com.semicolon.africa.contactmanagementsystem.exception.PhoneNumberExcepti
 import com.semicolon.africa.contactmanagementsystem.exception.UserEmailException;
 import com.semicolon.africa.contactmanagementsystem.exception.findingContactByIdException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -23,30 +26,42 @@ public class UserServiceImpl implements UserService{
     @Override
     public RegisterUserResponse signUp(RegisterUserRequest register) {
         User user = new User();
+        validatePhoneNumber(user.getPhoneNumber());
         user.setFirstName(register.getFirstName());
         user.setLastName(register.getLastName());
-        user.setPhoneNumber(register.getPhoneNumber());
         user.setEmail(register.getEmail());
+        user.setPhoneNumber(register.getPhoneNumber());
         userRepository.save(user);
         RegisterUserResponse response = new RegisterUserResponse();
-        response.setUserId(user.getId());
+        response.setFirstName(user.getFirstName());
+        response.setLastName(user.getLastName());
+        response.setEmail(user.getEmail());
+        response.setPhoneNumber(user.getPhoneNumber());
         response.setMessage(" Successfully SignUp ");
         return response;
+    }
+
+    private void validatePhoneNumber(String phoneNumber) {
+      boolean  isPhoneNumberExist = userRepository.existsByPhoneNumber(phoneNumber);
+      if (isPhoneNumberExist){
+          throw  new PhoneNumberException("Phone number already exist, Try again");
+      }
     }
     @Override
     public LoginUserResponse login(LoginUserRequest request) {
         User user = findUserByEmail(request.getEmail());
-        user.setEmail(request.getEmail());
-        user.setPhoneNumber(request.getPhoneNumber());
+        validatePhoneNumber(request.getPhoneNumber());
         userRepository.save(user);
         LoginUserResponse response = new LoginUserResponse();
+        response.setEmail(user.getEmail());
+        response.setPhoneNumber(user.getPhoneNumber());
         response.setLoggedIn(true);
         response.setMessage("Successfully LogIn");
         return response;
     }
     private User findUserByEmail(String email) {
-        return userRepository.findByEmail(email)
-                .orElseThrow(()-> new UserEmailException("Invalid Details"));
+        return userRepository.findByEmail(email).
+                orElseThrow(()-> new UserEmailException("Email does not exist"));
     }
     @Override
     public LogoutResponse logout(LogoutRequest request) {
@@ -54,29 +69,29 @@ public class UserServiceImpl implements UserService{
         user.setEmail(request.getEmail());
         userRepository.save(user);
         LogoutResponse logout = new LogoutResponse();
-        logout.setLoggedIn(false);
         logout.setMessage("Successfully Logout");
         return logout;
     }
-
     @Override
     public AddContactResponse addContact(AddContactsRequest request) {
         AddContactResponse response = contactsService.createContact(request);
         Contact contact = contactsService.findById(response.getContactId());
-        User user = findUserByEmail(response.getEmail());
-        user.getContactList().add(contact);
+        User user = findUserByEmail(request.getEmail());
+        List<Contact> contactList = user.getContactList();
+        contactList.add(contact);
+        user.setContactList(contactList);
         userRepository.save(user);
         return response;
     }
     @Override
     public ShareContactResponse shareContact(ShareContactRequest request) {
         Contact contact = new Contact();
-        contact.setPhoneNumber(request.getContactId());
-        User receiver = findById(request.getUserId());
+        User receiver = findById(request.getReceiverId());
+        receiver.setPhoneNumber(request.getReceiverId());
         receiver.getContactList().add(contact);
         userRepository.save(receiver);
         ShareContactResponse response = new ShareContactResponse();
-        response.setMessage("Contact Shared...");
+        response.setMessage("Contact Shared to another user ......");
         return response;
     }
     private User findById(String userId) {
@@ -84,18 +99,32 @@ public class UserServiceImpl implements UserService{
                 orElseThrow(()->new findingContactByIdException("ID NOT FOUND"));
     }
     @Override
-    public DeleteContactResponse deleteContact(AddContactsRequest request) {
-        DeleteContactResponse response = contactsService.deleteContactWith(request.getContactId());
-        return null;
+    public DeleteContactResponse deleteContact(DeleteContactRequest request) {
+       DeleteContactResponse response = contactsService.deleteByPhoneNumber(request.getPhoneNumber());
+       Contact contact = contactsService.findById(request.getContactId());
+       User user = findUserByPhoneNumber(request.getPhoneNumber());
+       List<Contact> contactList = user.getContactList();
+       contactList.remove(contact);
+       user.setContactList(contactList);
+       userRepository.delete(user);
+        return response;
     }
     private User findUserByPhoneNumber(String phoneNumber) {
         return userRepository.findByPhoneNumber(phoneNumber).
-                orElseThrow(()-> new PhoneNumberException("Phone number not found"));
+                orElseThrow(()-> new PhoneNumberException("Phone number not found..."));
     }
-
     @Override
     public UpdateContactResponse editContact(AddContactsRequest request) {
-        return null;
+        User user = new User();
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setPhoneNumber(request.getPhoneNumber());
+        UpdateContactResponse response = new UpdateContactResponse();
+        response.setFirstName(user.getFirstName());
+        response.setLastName(user.getLastName());
+        response.setEmail(user.getEmail());
+        response.setPhoneNumber(user.getPhoneNumber());
+        response.setMessage("Contact Updated Successfully");
+        return response;
     }
-
 }
