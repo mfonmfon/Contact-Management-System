@@ -1,8 +1,11 @@
 package com.semicolon.africa.contactmanagementsystem.services;
 
+import com.semicolon.africa.contactmanagementsystem.data.model.User;
 import com.semicolon.africa.contactmanagementsystem.dto.request.*;
 import com.semicolon.africa.contactmanagementsystem.dto.response.*;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public interface UserService {
@@ -17,10 +20,10 @@ public interface UserService {
 
     ShareContactResponse shareContact(ShareContactRequest request);
 
-    DeleteContactResponse deleteContact(DeleteContactRequest request);
+    DeleteContactResponse deleteContact(String phoneNumber);
 
     UpdateContactResponse editContact(UpdateContactRequest request);
 
-
+    List<User> getAllContacts(String userId);
 
 }

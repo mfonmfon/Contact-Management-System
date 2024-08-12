@@ -59,10 +59,7 @@ public class ContactsServicesImpl implements ContactsService{
         response.setMessage("Contact deleted");
         return response;
     }
-    @Override
-    public List<Contact> getAllContacts() {
-        return contactRepository.findAll();
-    }
+
     private Contact findContactByPhoneNumber(String phoneNumber) {
         return contactRepository.findByPhoneNumber(phoneNumber)
                 .orElseThrow(()->new PhoneNumberException("PhoneNumber Not Found"));
