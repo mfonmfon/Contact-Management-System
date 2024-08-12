@@ -40,7 +40,6 @@ public class UserServiceImpl implements UserService{
         response.setMessage(" Successfully SignUp ");
         return response;
     }
-
     private void validatePhoneNumber(String phoneNumber) {
       boolean  isPhoneNumberExist = userRepository.existsByPhoneNumber(phoneNumber);
       if (isPhoneNumberExist){
@@ -50,13 +49,13 @@ public class UserServiceImpl implements UserService{
     @Override
     public LoginUserResponse login(LoginUserRequest request) {
         User user = findUserByEmail(request.getEmail());
-        validatePhoneNumber(request.getPhoneNumber());
+//        validatePhoneNumber(request.getPhoneNumber());
         userRepository.save(user);
         LoginUserResponse response = new LoginUserResponse();
         response.setEmail(user.getEmail());
         response.setPhoneNumber(user.getPhoneNumber());
         response.setLoggedIn(true);
-        response.setMessage("Successfully LogIn");
+        response.setMessage(user.getEmail() + "Successfully LogIn");
         return response;
     }
     private User findUserByEmail(String email) {
@@ -99,15 +98,20 @@ public class UserServiceImpl implements UserService{
                 orElseThrow(()->new findingContactByIdException("ID NOT FOUND"));
     }
     @Override
-    public DeleteContactResponse deleteContact(DeleteContactRequest request) {
-       DeleteContactResponse response = contactsService.deleteByPhoneNumber(request.getPhoneNumber());
-       Contact contact = contactsService.findById(request.getContactId());
-       User user = findUserByPhoneNumber(request.getPhoneNumber());
-       List<Contact> contactList = user.getContactList();
-       contactList.remove(contact);
-       user.setContactList(contactList);
-       userRepository.delete(user);
+    public DeleteContactResponse deleteContact(String phoneNumber) {
+        User user = findUserByPhoneNumber(phoneNumber);
+        userRepository.delete(user);
+        DeleteContactResponse response = new DeleteContactResponse();
+        response.setMessage("Deleted Successfully");
         return response;
+//       DeleteContactResponse response = contactsService.deleteByPhoneNumber(request.getPhoneNumber());
+//       Contact contact = contactsService.findById(request.getContactId());
+//       User user = findUserByPhoneNumber(request.getPhoneNumber());
+//       List<Contact> contactList = user.getContactList();
+//       contactList.remove(contact);
+//       user.setContactList(contactList);
+//       userRepository.delete(user);
+//        return response;
     }
     private User findUserByPhoneNumber(String phoneNumber) {
         return userRepository.findByPhoneNumber(phoneNumber).
@@ -126,5 +130,9 @@ public class UserServiceImpl implements UserService{
         response.setPhoneNumber(user.getPhoneNumber());
         response.setMessage("Contact Updated Successfully");
         return response;
+    }
+    @Override
+    public List<User> getAllContacts(String userId) {
+        return userRepository.findAll();
     }
 }
