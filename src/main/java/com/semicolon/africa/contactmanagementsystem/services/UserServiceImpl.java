@@ -124,7 +124,7 @@ public class UserServiceImpl implements UserService{
         return response;
     }
     @Override
-    public List<User> getAllContacts(String userId) {
+    public List<User> getAllContacts() {
         return userRepository.findAll();
     }
 }

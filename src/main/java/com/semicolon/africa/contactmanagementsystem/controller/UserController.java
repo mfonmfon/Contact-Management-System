@@ -75,10 +75,10 @@ public class UserController {
                     HttpStatus.BAD_REQUEST);
         }
     }
-    @GetMapping("/{userId}")
-    public ResponseEntity<?> getAllContact(@PathVariable String userId){
+    @GetMapping("getAllContact")
+    public ResponseEntity<?> getAllContact(){
        try {
-           List<User> listOfContact = userService.getAllContacts(userId);
+           List<User> listOfContact = userService.getAllContacts();
            return new ResponseEntity<>(new ContactApiResponse(true, listOfContact),
                    HttpStatus.OK);
        }

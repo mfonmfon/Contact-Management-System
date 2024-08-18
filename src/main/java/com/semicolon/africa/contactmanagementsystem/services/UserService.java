@@ -24,6 +24,6 @@ public interface UserService {
 
     UpdateContactResponse editContact(UpdateContactRequest request);
 
-    List<User> getAllContacts(String userId);
+    List<User> getAllContacts();
 
 }
