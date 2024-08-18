@@ -104,14 +104,6 @@ public class UserServiceImpl implements UserService{
         DeleteContactResponse response = new DeleteContactResponse();
         response.setMessage("Deleted Successfully");
         return response;
-//       DeleteContactResponse response = contactsService.deleteByPhoneNumber(request.getPhoneNumber());
-//       Contact contact = contactsService.findById(request.getContactId());
-//       User user = findUserByPhoneNumber(request.getPhoneNumber());
-//       List<Contact> contactList = user.getContactList();
-//       contactList.remove(contact);
-//       user.setContactList(contactList);
-//       userRepository.delete(user);
-//        return response;
     }
     private User findUserByPhoneNumber(String phoneNumber) {
         return userRepository.findByPhoneNumber(phoneNumber).

@@ -20,7 +20,6 @@ public interface ContactsService {
 
     DeleteContactResponse deleteByPhoneNumber(String phoneNumber);
 
-
     Contact findById(String id);
 
     ShareContactResponse searchContactByUserPhoneNumber(String phoneNumber);
