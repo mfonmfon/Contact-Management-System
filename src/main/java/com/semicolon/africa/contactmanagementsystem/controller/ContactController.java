@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @RequestMapping
 @RestController("/contact")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class ContactController {
 
     private final ContactsService contactsService;
@@ -56,11 +56,16 @@ public class ContactController {
         }
     }
 
-//    @GetMapping
-//    public List<Contact> getAllContact(){
-//        try {
-//            contactsService.getAllContacts();
-//            return new ArrayList<>(new ContactApiResponse(true, ))
-//        }
-//    }
+    @GetMapping("/getAllContacts")
+    public ResponseEntity<?> allContacts(){
+        try {
+            List<Contact> allContacts = contactsService.findAll();
+            return new ResponseEntity<>(new ContactApiResponse(true, allContacts),
+                    HttpStatus.OK);
+        }
+        catch (Exception exception){
+            return new ResponseEntity<>(new ContactApiResponse(false, exception),
+                    HttpStatus.BAD_REQUEST);
+        }
+    }
 }

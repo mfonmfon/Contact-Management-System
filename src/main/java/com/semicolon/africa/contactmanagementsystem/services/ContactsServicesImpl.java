@@ -70,6 +70,7 @@ public class ContactsServicesImpl implements ContactsService{
                 orElseThrow(()->new findingContactByIdException("ID Not Found"));
     }
 
+
     @Override
     public ShareContactResponse searchContactByUserPhoneNumber(String phoneNumber) {
 
@@ -78,5 +79,10 @@ public class ContactsServicesImpl implements ContactsService{
     @Override
     public DeleteContactResponse deleteByUserByPhoneNumber(String phoneNumber) {
         return null;
+    }
+
+    @Override
+    public List<Contact> findAll() {
+        return contactRepository.findAll();
     }
 }

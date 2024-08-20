@@ -26,42 +26,48 @@ public class UserServiceImpl implements UserService{
     @Override
     public RegisterUserResponse signUp(RegisterUserRequest register) {
         User user = new User();
-        validatePhoneNumber(user.getPhoneNumber());
-        user.setFirstName(register.getFirstName());
-        user.setLastName(register.getLastName());
-        user.setEmail(register.getEmail());
-        user.setPhoneNumber(register.getPhoneNumber());
-        userRepository.save(user);
-        RegisterUserResponse response = new RegisterUserResponse();
-        response.setFirstName(user.getFirstName());
-        response.setLastName(user.getLastName());
-        response.setEmail(user.getEmail());
-        response.setPhoneNumber(user.getPhoneNumber());
-        response.setMessage(" Successfully SignUp ");
-        return response;
-    }
+        validatePhoneNumber(register.getPhoneNumber());
+            user.setFirstName(register.getFirstName());
+            user.setLastName(register.getLastName());
+            user.setEmail(register.getEmail());
+            user.setPhoneNumber(register.getPhoneNumber());
+            userRepository.save(user);
+            RegisterUserResponse response = new RegisterUserResponse();
+            response.setUserId(user.getId());
+            response.setFirstName(user.getFirstName());
+            response.setLastName(user.getLastName());
+            response.setEmail(user.getEmail());
+            response.setPhoneNumber(user.getPhoneNumber());
+            response.setMessage(" Successfully SignUp ");
+            return response;
+        }
+
     private void validatePhoneNumber(String phoneNumber) {
       boolean  isPhoneNumberExist = userRepository.existsByPhoneNumber(phoneNumber);
       if (isPhoneNumberExist){
           throw  new PhoneNumberException("Phone number already exist, Try again");
       }
     }
+
     @Override
     public LoginUserResponse login(LoginUserRequest request) {
         User user = findUserByEmail(request.getEmail());
-//        validatePhoneNumber(request.getPhoneNumber());
-        userRepository.save(user);
-        LoginUserResponse response = new LoginUserResponse();
-        response.setEmail(user.getEmail());
-        response.setPhoneNumber(user.getPhoneNumber());
-        response.setLoggedIn(true);
-        response.setMessage(user.getEmail() + "Successfully LogIn");
-        return response;
-    }
+            userRepository.save(user);
+            LoginUserResponse response = new LoginUserResponse();
+            response.setEmail(user.getEmail());
+            response.setPhoneNumber(user.getPhoneNumber());
+            response.setLoggedIn(true);
+            response.setMessage(user.getEmail() + "Successfully LogIn");
+            //remove the email
+            // in the response message
+            return response;
+        }
+
     private User findUserByEmail(String email) {
         return userRepository.findByEmail(email).
                 orElseThrow(()-> new UserEmailException("Email does not exist"));
     }
+
     @Override
     public LogoutResponse logout(LogoutRequest request) {
         User user = findUserByEmail(request.getEmail());
@@ -114,6 +120,7 @@ public class UserServiceImpl implements UserService{
         User user = new User();
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
+        user.setEmail(request.getEmail());
         user.setPhoneNumber(request.getPhoneNumber());
         UpdateContactResponse response = new UpdateContactResponse();
         response.setFirstName(user.getFirstName());

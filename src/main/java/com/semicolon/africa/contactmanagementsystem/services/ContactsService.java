@@ -26,5 +26,6 @@ public interface ContactsService {
 
     DeleteContactResponse deleteByUserByPhoneNumber(String userId);
 
+    List<Contact> findAll();
 
 }
